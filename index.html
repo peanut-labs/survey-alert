@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="stylesheet/style.css">
+  
+  <script type="text/javascript" src="js/alert.js"></script>
+  
+  <script type="text/javascript">
+    function initAlert() {
+      PeanutLabsAlert.initialize({
+        userId: document.getElementById('user_id').value,
+        debugEnabled: true,
+        hideAfter: 3, //seconds
+        iframeURL: 'http://trunk.com/sampleIframe.php?userId=' + document.getElementById('user_id').value,
+        positionHorizontal: 'right',
+        positionVertical: 'bottom',
+        server: 'http://trunk.com'
+        
+      });
+    } 
+  </script>
+</head>
+
+
+<body>
+  
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Peanut Labs Alert</h1>
+      <p>
+        <form>
+          <input id="user_id" type="text" class="form-control" style="width: 300px;" placeholder="User Id">
+          <input id="user_ip" type="text" class="form-control" style="width: 300px;" placeholder="User IP">
+        </form>
+      </p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="javascript: initAlert();" role="button">Check</a>
+      </p>
+    </div>
+  </div>
+  
+</body>
+
+</html>
