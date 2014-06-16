@@ -102,8 +102,8 @@ class PeanutLabsAlert
     div.style[@ops.positionVertical] = 0
     div.style[@ops.positionHorizontal] = 0
     
-    div.mouseover = clearTimeout(@hideTimer)
-    div.mouseout = @scheduleHideAlert()
+    div.onmouseover = ()=>clearTimeout(@hideTimer)
+    div.onmouseout = ()=>@scheduleHideAlert()
     
     content = @getContent()
     div.innerHTML = @alertTplNew(content.title, content.body, content.footer)

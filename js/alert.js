@@ -121,6 +121,16 @@
       div.style.width = "" + this.ops.alertWidth + "px";
       div.style[this.ops.positionVertical] = 0;
       div.style[this.ops.positionHorizontal] = 0;
+      div.onmouseover = (function(_this) {
+        return function() {
+          return clearTimeout(_this.hideTimer);
+        };
+      })(this);
+      div.onmouseout = (function(_this) {
+        return function() {
+          return _this.scheduleHideAlert();
+        };
+      })(this);
       content = this.getContent();
       div.innerHTML = this.alertTplNew(content.title, content.body, content.footer);
       document.getElementsByTagName('body')[0].appendChild(div);
