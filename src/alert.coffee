@@ -47,7 +47,7 @@ class PeanutLabsAlert
         background-image: -webkit-linear-gradient(90deg, rgba(218,223,230,.45) 0%, rgba(218,223,230,0) 100%);
         color: rgba(67,76,89,.9);
         text-shadow: 0 1px 0 rgba(255,255,255,.85);
-        font: 12px/1.5 "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
+        font: 12px/1.5 \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", \"DejaVu Sans\", Verdana, sans-serif;
         position: absolute;
         overflow:hidden;
        }
@@ -72,15 +72,11 @@ class PeanutLabsAlert
         position: relative;
         display: table-row;
        }
-    
+
        #PL_Alert :hover {
         border-color: rgba(0,0,0,1);
         background-color: rgba(237,239,242,1);
         cursor:pointer;
-       }
-
-       #PL_Alert :hover .close {
-        display: block;
        }
 
        #PL_Alert_icon {
@@ -102,7 +98,7 @@ class PeanutLabsAlert
         -webkit-box-shadow: 1px 0 0 rgba(255,255,255,.35), inset -1px 0 0 rgba(58,71,89,.1);
         background-image: none !important;
        }
-    
+
        #PL_Alert_icon img {
         min-width: 48px;
         min-height: 48px;
@@ -114,19 +110,48 @@ class PeanutLabsAlert
         float: left;
         border-radius: 3px;
        }
-    
+
        #PL_Alert_content {
         display: table-cell;
         vertical-align: top;
         padding: 10px 15px;
        }
+
+       #Peanut_id_hide {
+        position: absolute;
+        right:8px;
+        top:6px;
+        font-size: 12px;
+        z-index: 999;
+        display: none;
+        opacity: 0.8;
+       }
+
+       #PL_Alert:hover #Peanut_id_hide{
+        display: block;
+       }
+
        #PL_Alert_content_title {
         color: rgba(67,76,89,.9);
         font-size: 12px;
         margin: 5px 0 0 0px;
        }
+
        PL_Alert_content_body {
         margin: 5px 10px 5px 0px;
+       }
+
+       #PL_Alert a, #PL_Alert a:active{
+        background: none;
+        font-weight: bold;
+        color:rgba(67,76,89,.9);
+        text-decoration:none;
+       }
+
+       #PL_Alert a:hover{
+        background: none;
+        color:rgba(0,0,0,0.81);
+        text-decoration:none;
        }
     """
 
@@ -185,12 +210,12 @@ class PeanutLabsAlert
     div.style.zIndex = 100000
     div.style.position = 'fixed'
     div.style.padding = '0px'
-    div.style.paddingLeft = '10px'
+    div.style.paddingLeft = '0px'
     div.style.paddingTop = '0px'
     div.style.width = "#{@ops.alertWidth}px"
     
-    div.style[@ops.positionVertical] = 0
-    div.style[@ops.positionHorizontal] = 0
+    div.style[@ops.positionVertical] = 30
+    div.style[@ops.positionHorizontal] = 30
     
     div.onmouseover = ()=>clearTimeout(@hideTimer)
     div.onmouseout = ()=>@scheduleHideAlert()
@@ -230,7 +255,7 @@ class PeanutLabsAlert
   
   alertTplNew: (title, body, footer)->
     html = """
-        <a class="close" href="javascript: void(0);" id="Peanut_id_hide">X</a>
+        <a class="close" href="javascript: void(0);" id="Peanut_id_hide">&times;</a>
         <div>
           <div>
           	<span id="PL_Alert_icon"> <img width="128" alt="icon" src="#{@ops.logoURL}"></span>

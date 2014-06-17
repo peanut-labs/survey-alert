@@ -21,6 +21,13 @@
       });
     } 
   </script>
+
+  <script type="text/javascript">
+    function changeBackgroundColour() {
+      newColour = document.getElementById('background_colour').value;
+      document.body.style.background = newColour;
+    }
+  </script>
 </head>
 
 
@@ -37,6 +44,14 @@
       </p>
       <p>
         <a class="btn btn-lg btn-primary" href="javascript: initAlert();" role="button">Check</a>
+      </p>
+      <p>
+        <form>
+          <input id="background_colour" type="text" class="form-control" style="width: 300px;" placeholder="Colour hex value">
+        </form>
+      </p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="javascript: changeBackgroundColour();" role="button">Change Background Colour</a>
       </p>
     </div>
   </div>
