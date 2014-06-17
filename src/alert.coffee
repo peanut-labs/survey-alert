@@ -31,115 +31,13 @@ class PeanutLabsAlert
     alertWidth: 450
     positionVertical: 'bottom'
     positionHorizontal: 'right'
-    colorBg: '333333'
-    colorFg: 'ffffff'
-    colorFont: 'ffffff'
-    colorBorder: '000000'
-    colorLink: 'ffffff'
     hideAfter: 15 #seconds
     debugEnabled: no
     iframeURL: ''
-    currency_name: 'Virtual Currency'
-    
+    currency_name: 'Points'
+    logoURL = 'PL_Logo.png'
 
-  initialize: (options)->
-    options ||= {}
-    @ops = @options = Util.extend(DEFAULTS, options)
-    @sendRequest() if @validated()
-    
-  validated: ->
-    unless @ops.userId.indexOf('-') >= 0
-      @printDebug('Invalid Parameter: userId')
-      return no
-    unless @ops.iframeURL.indexOf('http') >= 0
-      @printDebug('Invalid Parameter: iframeURL')
-      return no
-    yes
-  
-  sendRequest: ->
-    script = document.createElement('script')
-    script.src = @getAPIUrl()
-    head = document.getElementsByTagName('head')[0]
-    head.appendChild(script)
-  
-  getAPIUrl: -> "#{@options.server}#{API_URL}?user_id=#{@options.userId}&user_ip=#{@options.userIP}&jsonp=PeanutLabsAlert.handleAlert"
-  
-  canShowAlert: (data)-> 
-    (data.surveys.status is 'profiled' and data.surveys.count > 0) or (data.surveys.status is 'profiler_available')
-  
-  handleAlert: (data)=>
-    data.surveys ||= {}
-    return no unless @canShowAlert(data)
-    @response = data
-    @showAlert()
-    
-  getContent: ->
-    content = {}
-    if @response.surveys.status is 'profiled'
-      content = 
-        title: "You have surveys waiting for you!"
-        body: "You qualify for #{@response.surveys.count} survey#{('s' if @response.surveys.count > 1) ? ''}. Earn up to #{@response.surveys.total_reward} #{@options.currency_name}!"
-        footer: ''
-    else
-      content = 
-        title: 'Profile and earn!'
-        body: 'Earn Mo money'
-    content
-            
- #Show Alert
-  showAlert: ()->
-    style = document.createElement('style')
-    style.innerHTML = @getStyles()
-    document.getElementsByTagName('head')[0].appendChild(style)
-    div = document.createElement('div')
-    div.id = EL_ID
-    div.style.zIndex = 100000
-    div.style.position = 'fixed'
-    div.style.padding = '0px'
-    div.style.paddingLeft = '10px'
-    div.style.paddingTop = '0px'
-    div.style.width = "#{@ops.alertWidth}px"
-    
-    div.style[@ops.positionVertical] = 0
-    div.style[@ops.positionHorizontal] = 0
-    
-    div.onmouseover = ()=>clearTimeout(@hideTimer)
-    div.onmouseout = ()=>@scheduleHideAlert()
-    
-    content = @getContent()
-    div.innerHTML = @alertTplNew(content.title, content.body, content.footer)
-    document.getElementsByTagName('body')[0].appendChild(div)
-    div.className = 'notification'
-    document.getElementById('Peanut_id_hide').onclick = ()=>@hideAlert()
-
-    
-    @hidden = no
-    @animateIn(div, (-1 * @ops.alertWidth), 10, ()=>@scheduleHideAlert())
-    
- #Animate the Alert In
-  animate: (el, from, to, direction, doneAnimating)->
-    if (direction is 'in' and from >= to) or (direction is 'out' and to >= from)
-      doneAnimating() if doneAnimating
-      return
-    el.style[@ops.positionHorizontal] = "#{from}px"
-    if direction is 'in' then new_from = from + 25 else new_from = from - 25
-    setTimeout (()=>@animate(el, new_from, to, direction, doneAnimating)), 25
-      
-  animateIn: (el, from, to, doneAnimating)-> @animate(el, from, to, 'in', doneAnimating)
-  animateOut: (el, from, to, doneAnimating)-> @animate(el, from, to, 'out', doneAnimating)
-      
-  scheduleHideAlert: -> 
-    #return
-    @hideTimer = setTimeout((()=>@hideAlert()), @ops.hideAfter * 1000)
-    
-  hideAlert: -> 
-    clearTimeout(@hideTimer)
-    el = @getAlertElement()
-    @animateOut(el, 0, -400, (()=>el.parentNode.removeChild(el)))
-  
-  getAlertElement: -> document.getElementById(EL_ID)
-  
-  getStyles: ->
+  STYLING = 
     """
        #PL_Alert {
         background-color: rgba(237,239,242,.70);
@@ -229,77 +127,117 @@ class PeanutLabsAlert
        PL_Alert_content_body {
         margin: 5px 10px 5px 0px;
        }
-      /* a, a:visited {
-        font-weight: bold;
-        color: rgba(67,76,89,.9);
-        text-decoration: none;
-       }
-       a:hover {
-        color: rgba(0,0,0,0.81);
-       }
-       .trigger {
-        color: white !important;
-        font-size: 30px !important;
-       }
-       .close {
-        position: absolute;
-        right: 8px;
-        top: 6px;
-        font-size: 12px;
-        color: #000000;
-        z-index: 999;
-        display: none;
-       }*/
     """
     
+
+  initialize: (options)->
+    options ||= {}
+    @ops = @options = Util.extend(DEFAULTS, options)
+    @sendRequest() if @validated()
+    
+  validated: ->
+    unless @ops.userId.indexOf('-') >= 0
+      @printDebug('Invalid Parameter: userId')
+      return no
+    unless @ops.iframeURL.indexOf('http') >= 0
+      @printDebug('Invalid Parameter: iframeURL')
+      return no
+    yes
+  
+  sendRequest: ->
+    script = document.createElement('script')
+    script.src = @getAPIUrl()
+    head = document.getElementsByTagName('head')[0]
+    head.appendChild(script)
+  
+  getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
+  
+  canShowAlert: (data)-> 
+    (data.surveys.status is 'profiled' and data.surveys.count > 0) or (data.surveys.status is 'profiler_available')
+  
+  handleAlert: (data)=>
+    data.surveys ||= {}
+    return no unless @canShowAlert(data)
+    @response = data
+    @showAlert()
+    
+  getContent: ->
+    content = {}
+    if @response.surveys.status is 'profiled'
+      content = 
+        title: "You have surveys waiting for you!"
+        body: "You qualify for #{@response.surveys.count} survey#{('s' if @response.surveys.count > 1) ? ''}. Earn up to #{@response.surveys.total_reward} #{@options.currency_name}!"
+        footer: ''
+    else
+      content = 
+        title: 'Profile and earn!'
+        body: 'Earn Mo money'
+    content
+            
+  showAlert: ()->
+    style = document.createElement('style')
+    style.innerHTML = STYLING
+    document.getElementsByTagName('head')[0].appendChild(style)
+    div = document.createElement('div')
+    div.id = EL_ID
+    div.style.zIndex = 100000
+    div.style.position = 'fixed'
+    div.style.padding = '0px'
+    div.style.paddingLeft = '10px'
+    div.style.paddingTop = '0px'
+    div.style.width = "#{@ops.alertWidth}px"
+    
+    div.style[@ops.positionVertical] = 0
+    div.style[@ops.positionHorizontal] = 0
+    
+    div.onmouseover = ()=>clearTimeout(@hideTimer)
+    div.onmouseout = ()=>@scheduleHideAlert()
+    
+    content = @getContent()
+    div.innerHTML = @alertTplNew(content.title, content.body, content.footer)
+    document.getElementsByTagName('body')[0].appendChild(div)
+    div.className = 'notification'
+    document.getElementById('Peanut_id_hide').onclick = ()=>@hideAlert()
+
+    
+    @hidden = no
+    @animateIn(div, (-1 * @ops.alertWidth), 10, ()=>@scheduleHideAlert())
+    
+ #Animate the Alert In
+  animate: (el, from, to, direction, doneAnimating)->
+    if (direction is 'in' and from >= to) or (direction is 'out' and to >= from)
+      doneAnimating() if doneAnimating
+      return
+    el.style[@ops.positionHorizontal] = "#{from}px"
+    if direction is 'in' then new_from = from + 25 else new_from = from - 25
+    setTimeout (()=>@animate(el, new_from, to, direction, doneAnimating)), 25
+      
+  animateIn: (el, from, to, doneAnimating)-> @animate(el, from, to, 'in', doneAnimating)
+  animateOut: (el, from, to, doneAnimating)-> @animate(el, from, to, 'out', doneAnimating)
+      
+  scheduleHideAlert: -> 
+    @hideTimer = setTimeout((()=>@hideAlert()), @ops.hideAfter * 1000)
+    
+  hideAlert: -> 
+    clearTimeout(@hideTimer)
+    el = @getAlertElement()
+    @animateOut(el, 0, -400, (()=>el.parentNode.removeChild(el)))
+  
+  getAlertElement: -> document.getElementById(EL_ID)
+  
   alertTplNew: (title, body, footer)->
     html = """
         <a class="close" href="javascript: void(0);" id="Peanut_id_hide">X</a>
         <div>
           <div>
-          	<span id="PL_Alert_icon"> <img width="128" alt="icon" src="ipad.png"></span>
+          	<span id="PL_Alert_icon"> <img width="128" alt="icon" src="#{@ops.logoURL}"></span>
             	<div id="PL_Alert_content">
                 <h1 id="PL_Alert_content_title">#{title}</h1>
-                <p id="PL_Alert_content_body">#{body} <a href="#">Click here</a></p>
+                <p id="PL_Alert_content_body">#{body} <a href="#{@ops.iframeURL}">Click here</a></p>
               </div>
           </div>
         </div>
     """
-  
-  alertTpl: (title, body, footer)->
-    html = """
-        <div style="z-index:1000; float:right; display:block; width:350px; background:##{@ops.colorBg}; border:4px solid##{@ops.colorBorder}; font-family:Verdana, Geneva, sans-serif; font-size:13px; padding:0px;">
-          <div style=" padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:7px; width:343px; float:left; background-color:##{@ops.colorBorder};">
-            <div id="Title_container" style="float:left;">
-              <a style="text-decoration:none; color:##{@ops.colorFg};" target="_blank" href="#{@ops.iframeURL}">
-                <b>#{title}</b>
-              </a>
-            </div>
-            <div style="float:right;">
-              <div style="float:right; width:17px">
-                <b>
-                  <a style="text-decoration: none; color:##{@ops.colorFg};" id="Peanut_id_hide" href="javascript: void(0);">
-                      &nbsp;X&nbsp;&nbsp;&nbsp;
-                  </a>
-                </b>
-              </div>
-            </div>
-          </div>
-          <div style=" border:0px solid##{@ops.colorBorder}; font-size:16px; background-color:##{@ops.colorBg}; float:right; padding:10px; width:330px;">
-            <div style="padding-right:10px; background-color:##{@ops.colorBg}; float:left;">
-              <a style="text-decoration:none; color:##{@ops.colorBg};" class="go" href="#">
-              </a>
-            </div>
-            <a id="Body_container" style="text-decoration: none; color:##{@ops.colorLink};" target="_blank" href="#{@ops.iframeURL}">
-             #{body}
-            </a>
-            <div style="float:left; font-size:10px; font-weight:bold; color:##{@ops.colorFont}">
-             #{footer}
-            </div>
-          </div>
-        </div>
-    """
-  
   
  #Print Debug
   printDebug: (msg)->
