@@ -36,7 +36,7 @@ class PeanutLabsAlert
     debugEnabled: no
     iframeURL: ''
     currency_name: 'Points'
-    logoURL = 'PL_Logo.png'
+    logoURL: 'PL_Logo.png'
 
   STYLING = 
     """
@@ -135,6 +135,7 @@ class PeanutLabsAlert
     @ops = @options = Util.extend(DEFAULTS, options)
     @sendRequest() if @validated()
     
+  # Does some simple validation on key parameters. 
   validated: ->
     unless @ops.userId.indexOf('-') >= 0
       @printDebug('Invalid Parameter: userId')
@@ -144,6 +145,7 @@ class PeanutLabsAlert
       return no
     yes
   
+
   sendRequest: ->
     script = document.createElement('script')
     script.src = @getAPIUrl()
@@ -199,16 +201,17 @@ class PeanutLabsAlert
     div.className = 'notification'
     document.getElementById('Peanut_id_hide').onclick = ()=>@hideAlert()
 
+    @slideDistance = -1 * div.clientHeight
     
     @hidden = no
-    @animateIn(div, (-1 * @ops.alertWidth), 10, ()=>@scheduleHideAlert())
+    @animateIn(div, @slideDistance, 10, ()=>@scheduleHideAlert())
     
  #Animate the Alert In
   animate: (el, from, to, direction, doneAnimating)->
     if (direction is 'in' and from >= to) or (direction is 'out' and to >= from)
       doneAnimating() if doneAnimating
       return
-    el.style[@ops.positionHorizontal] = "#{from}px"
+    el.style[@ops.positionVertical] = "#{from}px" 
     if direction is 'in' then new_from = from + 25 else new_from = from - 25
     setTimeout (()=>@animate(el, new_from, to, direction, doneAnimating)), 25
       
@@ -221,7 +224,7 @@ class PeanutLabsAlert
   hideAlert: -> 
     clearTimeout(@hideTimer)
     el = @getAlertElement()
-    @animateOut(el, 0, -400, (()=>el.parentNode.removeChild(el)))
+    @animateOut(el, 0, @slideDistance, (()=>el.parentNode.removeChild(el)))
   
   getAlertElement: -> document.getElementById(EL_ID)
   

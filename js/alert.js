@@ -39,7 +39,8 @@
       hideAfter: 15,
       debugEnabled: false,
       iframeURL: '',
-      currency_name: 'Points'
+      currency_name: 'Points',
+      logoURL: 'PL_Logo.png'
     };
 
     STYLING = "   #PL_Alert {\n    background-color: rgba(237,239,242,.70);\n    -webkit-border-radius: 4px;\n    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.1), inset 0 -1px 0 rgba(255,255,255,.15), 0 0 6px rgba(0,0,0,.08), 0 0 0 1px rgba(35,47,64,.5);\n    background-image: -webkit-linear-gradient(90deg, rgba(218,223,230,.45) 0%, rgba(218,223,230,0) 100%);\n    color: rgba(67,76,89,.9);\n    text-shadow: 0 1px 0 rgba(255,255,255,.85);\n    font: 12px/1.5 \"Lucida Grande\", \"Lucida Sans Unicode\", \"Lucida Sans\", \"DejaVu Sans\", Verdana, sans-serif;\n    position: absolute;\n    overflow:hidden;\n   }\n   \n   #PL_Alert > div {\n    border: none;\n    background-color: rgba(255,255,255,.15);\n    -webkit-border-radius: 4px;\n    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.55);\n    background: -webkit-linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.75) 100%);\n    height: 100%;\n    width:100%;\n    display: table;\n   }\n   \n   #PL_Alert >div >div {\n    border: none;\n    background-color: rgba(255,255,255,.15);\n    -webkit-border-radius: 4px;\n    -webkit-box-shadow: inset 0 -3px 2px rgba(58,71,89,.04);\n    overflow: hidden;\n    position: relative;\n    display: table-row;\n   }\n\n   #PL_Alert :hover {\n    border-color: rgba(0,0,0,1);\n    background-color: rgba(237,239,242,1);\n    cursor:pointer;\n   }\n\n   #PL_Alert :hover .close {\n    display: block;\n   }\n\n   #PL_Alert_icon {\n    padding: 15px;\n    display: table-cell;\n    vertical-align: top;\n    text-align: center;\n    min-width: 48px;\n    width: auto;\n    min-height: 100%;\n    height: 100%;\n    border-bottom-left-radius: 4px;\n    border-bottom-right-radius: 0;\n    border-top-left-radius: 4px;\n    border-top-right-radius: 0px;\n    background-repeat: no-repeat;\n    background-position: center center;\n    background-color: rgba(26,57,102,.05);\n    -webkit-box-shadow: 1px 0 0 rgba(255,255,255,.35), inset -1px 0 0 rgba(58,71,89,.1);\n    background-image: none !important;\n   }\n\n   #PL_Alert_icon img {\n    min-width: 48px;\n    min-height: 48px;\n    max-width: 256px;\n    max-height: 256px;\n    vertical-align: top;\n    margin: 0;\n    padding: 0;\n    float: left;\n    border-radius: 3px;\n   }\n\n   #PL_Alert_content {\n    display: table-cell;\n    vertical-align: top;\n    padding: 10px 15px;\n   }\n   #PL_Alert_content_title {\n    color: rgba(67,76,89,.9);\n    font-size: 12px;\n    margin: 5px 0 0 0px;\n   }\n   PL_Alert_content_body {\n    margin: 5px 10px 5px 0px;\n   }";
@@ -73,7 +74,7 @@
     };
 
     PeanutLabsAlert.prototype.getAPIUrl = function() {
-      return "" + this.options.server + API_URL + "?user_id=" + this.options.userId + "&user_ip=" + this.options.userIP + "&jsonp=PeanutLabsAlert.handleAlert";
+      return "" + this.ops.server + API_URL + "?user_id=" + this.ops.userId + "&user_ip=" + this.ops.userIP + "&jsonp=PeanutLabsAlert.handleAlert";
     };
 
     PeanutLabsAlert.prototype.canShowAlert = function(data) {
@@ -141,8 +142,9 @@
           return _this.hideAlert();
         };
       })(this);
+      this.slideDistance = -1 * div.clientHeight;
       this.hidden = false;
-      return this.animateIn(div, -1 * this.ops.alertWidth, 10, (function(_this) {
+      return this.animateIn(div, this.slideDistance, 10, (function(_this) {
         return function() {
           return _this.scheduleHideAlert();
         };
@@ -157,7 +159,7 @@
         }
         return;
       }
-      el.style[this.ops.positionHorizontal] = "" + from + "px";
+      el.style[this.ops.positionVertical] = "" + from + "px";
       if (direction === 'in') {
         new_from = from + 25;
       } else {
@@ -190,7 +192,7 @@
       var el;
       clearTimeout(this.hideTimer);
       el = this.getAlertElement();
-      return this.animateOut(el, 0, -400, ((function(_this) {
+      return this.animateOut(el, 0, this.slideDistance, ((function(_this) {
         return function() {
           return el.parentNode.removeChild(el);
         };
@@ -203,7 +205,7 @@
 
     PeanutLabsAlert.prototype.alertTplNew = function(title, body, footer) {
       var html;
-      return html = "<a class=\"close\" href=\"javascript: void(0);\" id=\"Peanut_id_hide\">X</a>\n<div>\n  <div>\n  	<span id=\"PL_Alert_icon\"> <img width=\"128\" alt=\"icon\" src=\"PL_Logo.png\"></span>\n    	<div id=\"PL_Alert_content\">\n        <h1 id=\"PL_Alert_content_title\">" + title + "</h1>\n        <p id=\"PL_Alert_content_body\">" + body + " <a href=\"" + this.ops.iframeURL + "\">Click here</a></p>\n      </div>\n  </div>\n</div>";
+      return html = "<a class=\"close\" href=\"javascript: void(0);\" id=\"Peanut_id_hide\">X</a>\n<div>\n  <div>\n  	<span id=\"PL_Alert_icon\"> <img width=\"128\" alt=\"icon\" src=\"" + this.ops.logoURL + "\"></span>\n    	<div id=\"PL_Alert_content\">\n        <h1 id=\"PL_Alert_content_title\">" + title + "</h1>\n        <p id=\"PL_Alert_content_body\">" + body + " <a href=\"" + this.ops.iframeURL + "\">Click here</a></p>\n      </div>\n  </div>\n</div>";
     };
 
     PeanutLabsAlert.prototype.printDebug = function(msg) {
