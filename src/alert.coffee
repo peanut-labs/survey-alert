@@ -36,7 +36,7 @@ class PeanutLabsAlert
     debugEnabled: no
     iframeURL: ''
     currency_name: 'Points'
-    logoURL: 'PL_Logo.png'
+    logoURL: 'http://ii.peanutlabs.com/PL_Logo.png'
 
   STYLING = 
     """
@@ -154,7 +154,7 @@ class PeanutLabsAlert
         text-decoration:none;
        }
     """
-
+  # Initialize the alert with default options defined above
   initialize: (options)->
     options ||= {}
     @ops = @options = Util.extend(DEFAULTS, options)
