@@ -39,6 +39,7 @@ class PeanutLabsAlert
     hideAfter: 15 #seconds
     debugEnabled: no
     iframeURL: ''
+    currency_name: 'Virtual Currency'
     
 
   initialize: (options)->
@@ -61,14 +62,14 @@ class PeanutLabsAlert
     head = document.getElementsByTagName('head')[0]
     head.appendChild(script)
   
-  getAPIUrl: -> "#{@options.server}#{API_URL}?user_id=#{@options.userId}&jsonp=PeanutLabsAlert.handleAlert"
+  getAPIUrl: -> "#{@options.server}#{API_URL}?user_id=#{@options.userId}&user_ip=#{@options.userIP}&jsonp=PeanutLabsAlert.handleAlert"
   
   canShowAlert: (data)-> 
     (data.surveys.status is 'profiled' and data.surveys.count > 0) or (data.surveys.status is 'profiler_available')
   
   handleAlert: (data)=>
     data.surveys ||= {}
-    #return no unless @canShowAlert(data)
+    return no unless @canShowAlert(data)
     @response = data
     @showAlert()
     
@@ -77,7 +78,7 @@ class PeanutLabsAlert
     if @response.surveys.status is 'profiled'
       content = 
         title: "You have surveys waiting for you!"
-        body: "You qualify for #{@response.surveys.count} surveys. Earn up to #{@response.surveys.total_reward} #{@response.surveys.currency_name}!"
+        body: "You qualify for #{@response.surveys.count} survey#{('s' if @response.surveys.count > 1) ? ''}. Earn up to #{@response.surveys.total_reward} #{@options.currency_name}!"
         footer: ''
     else
       content = 

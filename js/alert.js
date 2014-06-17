@@ -43,7 +43,8 @@
       colorLink: 'ffffff',
       hideAfter: 15,
       debugEnabled: false,
-      iframeURL: ''
+      iframeURL: '',
+      currency_name: 'Virtual Currency'
     };
 
     PeanutLabsAlert.prototype.initialize = function(options) {
@@ -75,7 +76,7 @@
     };
 
     PeanutLabsAlert.prototype.getAPIUrl = function() {
-      return "" + this.options.server + API_URL + "?user_id=" + this.options.userId + "&jsonp=PeanutLabsAlert.handleAlert";
+      return "" + this.options.server + API_URL + "?user_id=" + this.options.userId + "&user_ip=" + this.options.userIP + "&jsonp=PeanutLabsAlert.handleAlert";
     };
 
     PeanutLabsAlert.prototype.canShowAlert = function(data) {
@@ -84,17 +85,20 @@
 
     PeanutLabsAlert.prototype.handleAlert = function(data) {
       data.surveys || (data.surveys = {});
+      if (!this.canShowAlert(data)) {
+        return false;
+      }
       this.response = data;
       return this.showAlert();
     };
 
     PeanutLabsAlert.prototype.getContent = function() {
-      var content;
+      var content, _ref;
       content = {};
       if (this.response.surveys.status === 'profiled') {
         content = {
           title: "You have surveys waiting for you!",
-          body: "You qualify for " + this.response.surveys.count + " surveys. Earn up to " + this.response.surveys.total_reward + " " + this.response.surveys.currency_name + "!",
+          body: "You qualify for " + this.response.surveys.count + " survey" + ((_ref = (this.response.surveys.count > 1 ? 's' : void 0)) != null ? _ref : '') + ". Earn up to " + this.response.surveys.total_reward + " " + this.options.currency_name + "!",
           footer: ''
         };
       } else {

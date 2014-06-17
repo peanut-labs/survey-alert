@@ -10,13 +10,14 @@
     function initAlert() {
       PeanutLabsAlert.initialize({
         userId: document.getElementById('user_id').value,
+        userIP: document.getElementById('user_ip').value,
         debugEnabled: true,
         hideAfter: 3, //seconds
         iframeURL: 'http://trunk.com/sampleIframe.php?userId=' + document.getElementById('user_id').value,
         positionHorizontal: 'right',
         positionVertical: 'bottom',
-        server: 'http://trunk.com'
-        
+        server: 'http://trunk.com',
+        currency_name: 'Peanuts'
       });
     } 
   </script>
