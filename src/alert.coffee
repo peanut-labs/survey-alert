@@ -14,14 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # 
-#
+
+# Simple util method to add default values to 'b' that are defined in 'a' and not defined in 'b'
 class Util
   @extend: (a, b)->
     for key of b
       if b.hasOwnProperty(key)
         a[key] = b[key]
     a
-    
+
 class PeanutLabsAlert
 
   EL_ID = 'PL_Alert'
@@ -128,7 +129,6 @@ class PeanutLabsAlert
         margin: 5px 10px 5px 0px;
        }
     """
-    
 
   initialize: (options)->
     options ||= {}
