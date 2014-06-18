@@ -36,7 +36,7 @@
       alertWidth: 450,
       positionVertical: 'bottom',
       positionHorizontal: 'right',
-      hideAfter: 15,
+      hideAfter: 10,
       debugEnabled: false,
       iframeURL: '',
       currency_name: 'Points',

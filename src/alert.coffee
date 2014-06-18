@@ -32,7 +32,7 @@ class PeanutLabsAlert
     alertWidth: 450
     positionVertical: 'bottom'
     positionHorizontal: 'right'
-    hideAfter: 15 #seconds
+    hideAfter: 10 #seconds
     debugEnabled: no
     iframeURL: ''
     currency_name: 'Points'
