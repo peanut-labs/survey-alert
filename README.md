@@ -1,8 +1,7 @@
 Survey-Alert
 ============
-
-
-## DESCRIPTION
+ ---
+## Description
 
 Survey Alert is a small standalone Javascript alert which ties into the [PeanutLabs Monetization API](http://peanut-labs.github.io/publisher-doc/#overview) and is intended to help inform and direct users if they have surveys available to complete.
 
@@ -10,7 +9,7 @@ It's entirely vanilla Javascript and has no dependencies, so can be included on 
 
 Survey Alert can either be used as is, or act as a jumping off point for building your own custom integration and alert into your website.
 
-## EXAMPLE USAGE
+## Example Usage
 
 Basic usage of the Survey Alert is shown in the included html file. To see the alert, a valid user ID and user IP need to be entered before clicking the 'Check' button ([for more information on these, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
 
@@ -50,51 +49,67 @@ And finally something on the page needs to call this function, which in this exa
 
 In an actual usage of the alert it would be more likely that you would call this differently, for example automatically after a page loads, passing it the user id and user ip.
 
-## BASIC CUSTOMIZATION
+## Basic Customization
 
-Some basic customization can be done while still using the Survey Alert exactly as it is, by passing optional parameters to initialize() method. These are:
+Some basic customization can be done while still using the Survey Alert exactly as it is, by passing parameters to the initialize() method. These are:
 
- - **userId (required)**
+ - **userId (required):**  
+   The id of the user for which you wish to look up surveys. For more details on this check the API documentation.
 
-   The id of the user for which you wish to look up surveys. For more details on this check the API documentation.  
+ - **userIP (required):**  
+   The IP adress of the user for which you wish to look up surveys. For more details on this check the API documentation.
 
- - **userIP (required)**
+ - **iframeURL (required):**  
+   The url which is included on the alert and a user is prompted to click to go complete surveys.  This will most likely point to the page on which you have the iframe hosted.
 
-   The IP adress of the user for which you wish to look up surveys. For more details on this check the API documentation.  
+ - **server:**  
+   The server to which the api request will be sent.  It defaults to api.peanutlabs.com, and in most cases can be left as this.
 
- - **iframeURL (required)**
+ - **alertWidth**  
+   The width of the alert. Defaults to 450px and the text it contains will wrap accordingly.
 
-   The url which is included on the alert and a user is prompted to click to go complete surveys.  This will most likely point to the page on which you have the iframe hosted.  
+ - **positionVertical**  
+   Determines wheather the alert will appear from the top or the bottom of the page. Can be set either to 'top' or 'bottom' and defaults to 'bottom'.
 
- - **server**
+ - **positionHorizontal**  
+   Determines wheather the alert will appear from the left or the right of the page. Can be set either to 'left' or 'right' and defaults to 'right'.
 
-   The server to which the api request will be sent.  It defaults to api.peanutlabs.com, and in most cases can be left as this.  
+ - **hideAfter**  
+   How many seconds the alert will stay on screen before hiding. Note that this will be delayed if the user mouses over the alert and start again when they move the mouse off of it. Defaults to 10 seconds.
 
- - **alertWidth**
+ - **currency_name**  
+   The name of your virtual currency which the alert will use in the message. Defaults to 'Points'.
 
-   The width of the alert. Defaults to 450px and the text it contains will wrap accordingly.  
+ - **logoURL**  
+   The url for the image which will be displayed next to the alert message. Defaults to a PeanutLabs logo hosted at http://ii.peanutlabs.com/PL_Logo.png.
 
- - **positionVertical**
-
-   Determines wheather the alert will appear from the top or the bottom of the page. Can be set either to 'top' or 'bottom' and defaults to 'bottom'.  
-
- - **positionHorizontal**
-
-   Determines wheather the alert will appear from the left or the right of the page. Can be set either to 'left' or 'right' and defaults to 'right'.  
-
- - **hideAfter**
-
-   How many seconds the alert will stay on screen before hiding. Note that this will be delayed if the user mouses over the alert and start again when they move the mouse off of it. Defaults to 10 seconds.  
-
- - **currency_name**
-
-   The name of your virtual currency which the alert will use in the message. Defaults to 'Points'.  
-
- - **logoURL**
-
-   The url for the image which will be displayed next to the alert message. Defaults to a PeanutLabs logo hosted at http://ii.peanutlabs.com/PL_Logo.png.  
-
- - **debugEnabled**
-
-   A boolean which if set to true, will cause debug messages to be logged to the console. Defaults to false and should only be set to true for testing purposes.  
+ - **debugEnabled**  
+   A boolean which if set to true, will cause debug messages to be logged to the console. Defaults to false and should only be set to true for testing purposes.
 	
+## Further Customization and Integration
+
+Although it is completely possible to use the Survey Alert as is, it is highly encouraged to dig right into the code and just use this example as a jumpping off point for integrating the Monetization API more directly into your site.
+
+For customizing, rewriting or just looking through the Survey Alert as an example, it is reccommended you look at the coffeescript file in the /src/ folder. This is the main commented source file, which is compiled with Cake into the javascript found in the /js/ folder.
+
+### Custom Styling:
+
+If you are just looking to modify the look of the alert, styling is done with the `STYLE` string. This string is injected the into the page, and then gets applied to the elements in the template html defined in `alertTplNew`.
+
+### Using the API Result:
+
+The actual API request itself if made with the `sendRequest` and `getAPIUrl` methods:
+
+```CoffeeScript
+# Appends a script to the head with the src pointing to the API request url.
+sendRequest: ->
+  script = document.createElement('script')
+  script.src = @getAPIUrl()
+  head = document.getElementsByTagName('head')[0]
+  head.appendChild(script)
+
+# Formats the API request url, using the userId, userIp and server url from the options.
+getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
+```
+
+`sendRequest` appends a script element to the head, with the source pointing to the actual API request url itself. For more detail on the format of this request, look at the [API documentation itself](http://peanut-labs.github.io/publisher-doc/#methodcampaignssummary), but the key thing to note is the `jsonp=PeanutLabsAlert.handleAlert` parameter passed in. This causes the reseult returned by the API call to be wrapped with the `PeanutLabsAlert.handleAlert` method call, passing the JSON result to that as a parameter.
