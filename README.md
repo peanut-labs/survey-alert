@@ -14,7 +14,7 @@ Survey Alert can either be used as is, or act as a jumping off point for buildin
 
 Basic usage of the Survey Alert is shown in the included html file. To see the alert, a valid user ID and user IP need to be entered before clicking the 'Check' button ([for more information on these, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
 
-![Example screenshot](../blob/master/example-screenshot.png?raw=true)
+![Example screenshot](../master/example-screenshot.png?raw=true)
 
 The way it is included into the page is very simple. Firstly the single javascript file is included in the head:
 
