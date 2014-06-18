@@ -154,7 +154,8 @@ class PeanutLabsAlert
         text-decoration:none;
        }
     """
-  # Initialize the alert with default options defined above
+  # Initializes the alert with default options defined above, 
+  # then sends the API request with user details.
   initialize: (options)->
     options ||= {}
     @ops = @options = Util.extend(DEFAULTS, options)
@@ -170,24 +171,29 @@ class PeanutLabsAlert
       return no
     yes
   
-
+  # Appends a script to the head with the src pointing to the API request url.
   sendRequest: ->
     script = document.createElement('script')
     script.src = @getAPIUrl()
     head = document.getElementsByTagName('head')[0]
     head.appendChild(script)
   
+  # Formats the API request url, using the userId, userIp and server url from the options.
   getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
   
+  # Only shows the alert if the API response returns surveys, or the profiler.
   canShowAlert: (data)-> 
     (data.surveys.status is 'profiled' and data.surveys.count > 0) or (data.surveys.status is 'profiler_available')
   
+  # Method called by the JSONP response from the API request, 
+  # checks for basic validation on the response then shows the alert.
   handleAlert: (data)=>
     data.surveys ||= {}
     return no unless @canShowAlert(data)
     @response = data
     @showAlert()
     
+  # Formats the content to be displayed from the values in the returned API response.
   getContent: ->
     content = {}
     if @response.surveys.status is 'profiled'
@@ -200,7 +206,9 @@ class PeanutLabsAlert
         title: 'Profile and earn!'
         body: 'Earn Mo money'
     content
-            
+  
+  # Creates the alert element, styles it, sets the content, 
+  # then sets it to animate it and animate out after the timeout period.
   showAlert: ()->
     style = document.createElement('style')
     style.innerHTML = STYLING
@@ -214,9 +222,10 @@ class PeanutLabsAlert
     div.style.paddingTop = '0px'
     div.style.width = "#{@ops.alertWidth}px"
     
-    div.style[@ops.positionVertical] = 30
-    div.style[@ops.positionHorizontal] = 30
+    div.style[@ops.positionVertical] = 25
+    div.style[@ops.positionHorizontal] = 25
     
+    # Delay the hiding of the alert if the user mouses over it.
     div.onmouseover = ()=>clearTimeout(@hideTimer)
     div.onmouseout = ()=>@scheduleHideAlert()
     
@@ -226,12 +235,12 @@ class PeanutLabsAlert
     div.className = 'notification'
     document.getElementById('Peanut_id_hide').onclick = ()=>@hideAlert()
 
+    # Calcualte how for it should move, then start animating the alert in.
     @slideDistance = -1 * div.clientHeight
+    @animateIn(div, @slideDistance, 25, ()=>@scheduleHideAlert())
     
-    @hidden = no
-    @animateIn(div, @slideDistance, 10, ()=>@scheduleHideAlert())
-    
- #Animate the Alert In
+  # Animate the alert, moving it in or out a bit,
+  # then set a timeout to call the animation again.
   animate: (el, from, to, direction, doneAnimating)->
     if (direction is 'in' and from >= to) or (direction is 'out' and to >= from)
       doneAnimating() if doneAnimating
@@ -239,13 +248,15 @@ class PeanutLabsAlert
     el.style[@ops.positionVertical] = "#{from}px" 
     if direction is 'in' then new_from = from + 25 else new_from = from - 25
     setTimeout (()=>@animate(el, new_from, to, direction, doneAnimating)), 25
-      
+  
   animateIn: (el, from, to, doneAnimating)-> @animate(el, from, to, 'in', doneAnimating)
   animateOut: (el, from, to, doneAnimating)-> @animate(el, from, to, 'out', doneAnimating)
-      
+  
+  # Creates a timeout to hide the alert after the time specified in the options.
   scheduleHideAlert: -> 
     @hideTimer = setTimeout((()=>@hideAlert()), @ops.hideAfter * 1000)
-    
+  
+  # Starts the alert animating out.
   hideAlert: -> 
     clearTimeout(@hideTimer)
     el = @getAlertElement()
@@ -253,6 +264,7 @@ class PeanutLabsAlert
   
   getAlertElement: -> document.getElementById(EL_ID)
   
+  # Template for the alert html. Gets styled from the styling defined earlier.
   alertTplNew: (title, body, footer)->
     html = """
         <a class="close" href="javascript: void(0);" id="Peanut_id_hide">&times;</a>
@@ -267,7 +279,7 @@ class PeanutLabsAlert
         </div>
     """
   
- #Print Debug
+  # Simple message to log debug messages to the console if debugging is enabled.
   printDebug: (msg)->
     return unless @ops.debugEnabled
     console.log "Debug Msg: #{msg}"

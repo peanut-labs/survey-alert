@@ -121,8 +121,8 @@
       div.style.paddingLeft = '0px';
       div.style.paddingTop = '0px';
       div.style.width = "" + this.ops.alertWidth + "px";
-      div.style[this.ops.positionVertical] = 30;
-      div.style[this.ops.positionHorizontal] = 30;
+      div.style[this.ops.positionVertical] = 25;
+      div.style[this.ops.positionHorizontal] = 25;
       div.onmouseover = (function(_this) {
         return function() {
           return clearTimeout(_this.hideTimer);
@@ -143,8 +143,7 @@
         };
       })(this);
       this.slideDistance = -1 * div.clientHeight;
-      this.hidden = false;
-      return this.animateIn(div, this.slideDistance, 10, (function(_this) {
+      return this.animateIn(div, this.slideDistance, 25, (function(_this) {
         return function() {
           return _this.scheduleHideAlert();
         };
