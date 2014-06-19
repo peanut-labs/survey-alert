@@ -74,7 +74,7 @@
     };
 
     PeanutLabsAlert.prototype.getAPIUrl = function() {
-      return "" + this.ops.server + API_URL + "?user_id=" + this.ops.userId + "&user_ip=" + this.ops.userIP + "&jsonp=PeanutLabsAlert.handleAlert";
+      return "" + this.ops.server + API_URL + "?user_id=" + this.ops.userId + "&jsonp=PeanutLabsAlert.handleAlert";
     };
 
     PeanutLabsAlert.prototype.canShowAlert = function(data) {

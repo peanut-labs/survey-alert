@@ -178,8 +178,8 @@ class PeanutLabsAlert
     head = document.getElementsByTagName('head')[0]
     head.appendChild(script)
   
-  # Formats the API request url, using the userId, userIp and server url from the options.
-  getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
+  # Formats the API request url, using the userId and server url from the options.
+  getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&jsonp=PeanutLabsAlert.handleAlert"
   
   # Only shows the alert if the API response returns surveys, or the profiler.
   canShowAlert: (data)-> 

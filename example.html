@@ -2,17 +2,15 @@
 
 <head>
   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="stylesheet/style.css">
-  <script type="text/javascript" src="js/alert.js"></script>
+  <script type="text/javascript" src="alert.js"></script>
   
   <script type="text/javascript">
     function initAlert() {
       PeanutLabsAlert.initialize({
         userId: document.getElementById('user_id').value,
-        userIP: document.getElementById('user_ip').value,
         debugEnabled: true,
         hideAfter: 4, // seconds
-        iframeURL: 'http://peanutlabs.com/sampleIframe.php?userId=' + document.getElementById('user_id').value,
+        iframeURL: 'YOUR_IFRAME_URL_GOES_HERE',
         positionHorizontal: 'right',
         positionVertical: 'bottom',
         server: 'http://api.peanutlabs.com',
@@ -38,7 +36,6 @@
       <p>
         <form>
           <input id="user_id" type="text" class="form-control" style="width: 300px;" placeholder="User Id">
-          <input id="user_ip" type="text" class="form-control" style="width: 300px;" placeholder="User IP">
         </form>
       </p>
       <p>

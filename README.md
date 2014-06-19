@@ -11,14 +11,14 @@ Survey Alert can either be used as is, or act as a jumping off point for buildin
 
 ## Example Usage
 
-Basic usage of the Survey Alert is shown in the included html file. To see the alert, a valid user ID and user IP need to be entered before clicking the 'Check' button ([for more information on these, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
+Basic usage of the Survey Alert is shown in the included html file. To see the alert in action, you will need to change the `iframeURL` to the url you have the iframe hosted on, then a valid user ID needs to be entered before clicking the 'Check' button ([for more information on this, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
 
 ![Example screenshot](../master/example-screenshot.png?raw=true)
 
 The way it is included into the page is very simple. Firstly the single javascript file is included in the head:
 
 ```html
-<script type="text/javascript" src="js/alert.js"></script>
+<script type="text/javascript" src="alert.js"></script>
 ```
 
 A function is also added to the head for initializing the alert with the needed parameters and the custom options (more information on these can be found in the Parameters and Basic Customization section below):
@@ -28,10 +28,9 @@ A function is also added to the head for initializing the alert with the needed 
   function initAlert() {
     PeanutLabsAlert.initialize({
       userId: document.getElementById('user_id').value,
-      userIP: document.getElementById('user_ip').value,
       debugEnabled: true,
       hideAfter: 4, // seconds
-      iframeURL: 'http://peanutlabs.com/sampleIframe.php?userId=' + document.getElementById('user_id').value,
+      iframeURL: 'YOUR_IFRAME_URL_GOES_HERE',
       positionHorizontal: 'right',
       positionVertical: 'bottom',
       server: 'http://api.peanutlabs.com',
@@ -47,7 +46,7 @@ And finally something on the page needs to call this function, which in this exa
 <a class="btn btn-lg btn-primary" href="javascript: initAlert();" role="button">Check</a>
 ```
 
-In an actual usage of the alert it would be more likely that you would call this differently, for example automatically after a page loads, passing it the user id and user ip.
+In an actual usage of the alert it would be more likely that you would call this differently, for example automatically after a page loads, passing it the user id.
 
 ## Parameters and Basic Customization
 
@@ -58,13 +57,13 @@ When initializing the Survey Alert there are a few parameters you are required t
  - **userId (required):**  
    The id of the user for which you wish to look up surveys. For more details on this check the API documentation.
 
- - **userIP (required):**  
-   The IP adress of the user for which you wish to look up surveys. For more details on this check the API documentation.
-
  - **iframeURL (required):**  
-   The url which is included on the alert and a user is prompted to click to go complete surveys.  This will most likely point to the page on which you have the iframe hosted.
+   The url which is included on the alert and the user is prompted to click to go complete surveys.  In the example code this currently has a placeholder, but in practice it will point to the page on which you have the iframe hosted.
 
 ### Optional Parameters:
+
+ - **userIP:**  
+   The IP adress of the user for which you wish to look up surveys. This is not required if you are issuing the API request from the users browser, but will be needed if you wish to make the call server to server. For more details on this check the API documentation.
 
  - **server:**  
    The server to which the api request will be sent.  It defaults to api.peanutlabs.com, and in most cases can be left as this.
@@ -94,7 +93,7 @@ When initializing the Survey Alert there are a few parameters you are required t
 
 Although it is completely possible to use the Survey Alert as is, it is highly encouraged to dig right into the code and just use this example as a jumpping off point for integrating the Monetization API more directly into your site.
 
-For customizing, rewriting or just looking through the Survey Alert as an example, it is reccommended you look at the coffeescript file in the `/src/` folder. This is the main commented source file, which is compiled with Cake into the javascript found in the `/js/` folder.
+For customizing, rewriting or just looking through the Survey Alert as an example, it is reccommended you look at the coffeescript file in the `/src/` folder. This is the main commented source file, which is compiled with Cake into the javascript found in the root.
 
 ### Custom Styling:
 
@@ -112,8 +111,8 @@ sendRequest: ->
   head = document.getElementsByTagName('head')[0]
   head.appendChild(script)
 
-# Formats the API request url, using the userId, userIp and server url from the options.
-getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
+# Formats the API request url, using the userId and server url from the options, and passing in the JSONP parameter with the callback method you wish to trigger.
+getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&jsonp=PeanutLabsAlert.handleAlert"
 ```
 
 `sendRequest` appends a script element to the head, with the source pointing to the actual API request url itself. For more detail on the format of this request, look at the [API documentation itself](http://peanut-labs.github.io/publisher-doc/#methodcampaignssummary), but the key thing to note is the `jsonp=PeanutLabsAlert.handleAlert` parameter passed in. This causes the reseult returned by the API call to be wrapped with the `PeanutLabsAlert.handleAlert()` method call, passing the JSON result to that as a parameter.
