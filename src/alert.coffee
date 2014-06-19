@@ -37,7 +37,7 @@ class PeanutLabsAlert
     debugEnabled: no
     iframeURL: ''
     currencyName: 'Points'
-    logoURL: '//ii.peanutlabs.com/PL_Logo.png'
+    logoURL: '//d1dawe8abjllt1.cloudfront.net/PL_Logo.png'
 
   STYLING = 
     """
