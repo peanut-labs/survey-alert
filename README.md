@@ -1,6 +1,6 @@
 Survey-Alert
 ============
- ---
+
 ## Description
 
 Survey Alert is a small standalone Javascript alert which ties into the [PeanutLabs Monetization API](http://peanut-labs.github.io/publisher-doc/#overview) and is intended to help inform and direct users if they have surveys available to complete.
@@ -21,7 +21,7 @@ The way it is included into the page is very simple. Firstly the single javascri
 <script type="text/javascript" src="js/alert.js"></script>
 ```
 
-A function is also added to the head for initializing the alert with the needed parameters and the custom options (more information on these can be found in the Basic Customization section below):
+A function is also added to the head for initializing the alert with the needed parameters and the custom options (more information on these can be found in the Parameters and Basic Customization section below):
 
 ```html
 <script type="text/javascript">
@@ -49,9 +49,11 @@ And finally something on the page needs to call this function, which in this exa
 
 In an actual usage of the alert it would be more likely that you would call this differently, for example automatically after a page loads, passing it the user id and user ip.
 
-## Basic Customization
+## Parameters and Basic Customization
 
-Some basic customization can be done while still using the Survey Alert exactly as it is, by passing parameters to the initialize() method. These are:
+When initializing the Survey Alert there are a few parameters you are required to pass to it, along with several optional parameters which allow for some basic customization:
+
+### Required parameters:
 
  - **userId (required):**  
    The id of the user for which you wish to look up surveys. For more details on this check the API documentation.
@@ -61,6 +63,8 @@ Some basic customization can be done while still using the Survey Alert exactly 
 
  - **iframeURL (required):**  
    The url which is included on the alert and a user is prompted to click to go complete surveys.  This will most likely point to the page on which you have the iframe hosted.
+
+### Optional Parameters:
 
  - **server:**  
    The server to which the api request will be sent.  It defaults to api.peanutlabs.com, and in most cases can be left as this.
@@ -90,7 +94,7 @@ Some basic customization can be done while still using the Survey Alert exactly 
 
 Although it is completely possible to use the Survey Alert as is, it is highly encouraged to dig right into the code and just use this example as a jumpping off point for integrating the Monetization API more directly into your site.
 
-For customizing, rewriting or just looking through the Survey Alert as an example, it is reccommended you look at the coffeescript file in the /src/ folder. This is the main commented source file, which is compiled with Cake into the javascript found in the /js/ folder.
+For customizing, rewriting or just looking through the Survey Alert as an example, it is reccommended you look at the coffeescript file in the `/src/` folder. This is the main commented source file, which is compiled with Cake into the javascript found in the `/js/` folder.
 
 ### Custom Styling:
 
@@ -112,4 +116,4 @@ sendRequest: ->
 getAPIUrl: -> "#{@ops.server}#{API_URL}?user_id=#{@ops.userId}&user_ip=#{@ops.userIP}&jsonp=PeanutLabsAlert.handleAlert"
 ```
 
-`sendRequest` appends a script element to the head, with the source pointing to the actual API request url itself. For more detail on the format of this request, look at the [API documentation itself](http://peanut-labs.github.io/publisher-doc/#methodcampaignssummary), but the key thing to note is the `jsonp=PeanutLabsAlert.handleAlert` parameter passed in. This causes the reseult returned by the API call to be wrapped with the `PeanutLabsAlert.handleAlert` method call, passing the JSON result to that as a parameter.
+`sendRequest` appends a script element to the head, with the source pointing to the actual API request url itself. For more detail on the format of this request, look at the [API documentation itself](http://peanut-labs.github.io/publisher-doc/#methodcampaignssummary), but the key thing to note is the `jsonp=PeanutLabsAlert.handleAlert` parameter passed in. This causes the reseult returned by the API call to be wrapped with the `PeanutLabsAlert.handleAlert()` method call, passing the JSON result to that as a parameter.
