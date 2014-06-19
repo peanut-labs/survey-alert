@@ -1,5 +1,5 @@
-PeanutLabs Survey-Alert
-=======================
+Peanut Labs Survey-Alert
+========================
 
 ## Description
 
@@ -46,7 +46,7 @@ And finally something on the page needs to call this function, which in the exam
 ```
 
 **NOTE:**
-In an actual usage of the alert it would be more likely that you would call this differently, for example automatically after a page loads, passing it the id of the user visiting that page and the url you have the iframe hosted on.
+In an actual usage of the alert the call to your `initAlert()` would not be tied to a button, but more liekly it would automatically be called after a page loads, passing it the id of the user visiting that page and the url you have the iframe hosted on.
 
 ## Parameters and Basic Customization
 
