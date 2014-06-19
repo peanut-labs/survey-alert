@@ -11,7 +11,7 @@ Survey Alert can either be used as is, or act as a jumping off point for buildin
 
 ## Example Usage
 
-Basic usage of the Survey Alert is shown in the included html file. To see the alert in action, you will need to change the `iframeURL` to the url you have the iframe hosted on, then a valid user ID needs to be entered before clicking the 'Check' button ([for more information on this, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
+Basic usage of the Survey Alert is shown in the included html file. To see the alert in action, you first will need to change the `iframeURL` in the exmaple html to the url you have the iframe hosted on. Then after loading the html page, a valid user ID needs to be entered before clicking the 'Check' button ([for more information on this, see the Parameters section in the API guide](http://peanut-labs.github.io/publisher-doc/#methodcampaigns)). The alert should appear similar to that below:
 
 ![Example screenshot](../master/example-screenshot.png?raw=true)
 
