@@ -8,12 +8,11 @@
     function initAlert() {
       PeanutLabsAlert.initialize({
         userId: document.getElementById('user_id').value,
-        debugEnabled: true,
-        hideAfter: 4, // seconds
-        iframeURL: 'YOUR_IFRAME_URL_GOES_HERE',
+        debugEnabled: true, // Have debug messages logged to the consolse.
+        hideAfter: 4, // Makes the alert hide after 4 seconds. Can be left out, and will default to 10 seconds.
+        iframeURL: 'YOUR_IFRAME_URL_GOES_HERE', // This URL needs to be changed to the url for the iframe.
         positionHorizontal: 'right',
         positionVertical: 'bottom',
-        server: 'http://api.peanutlabs.com',
         currency_name: 'Peanuts'
       });
     } 

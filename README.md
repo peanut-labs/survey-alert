@@ -29,11 +29,10 @@ A function is also added to the head for initializing the alert with the needed 
     PeanutLabsAlert.initialize({
       userId: document.getElementById('user_id').value,
       debugEnabled: true,
-      hideAfter: 4, // seconds
+      hideAfter: 4, // Makes the alert hide after 4 seconds. Can be left out, and will default to 10 seconds.
       iframeURL: 'YOUR_IFRAME_URL_GOES_HERE',
       positionHorizontal: 'right',
       positionVertical: 'bottom',
-      server: 'http://api.peanutlabs.com',
       currency_name: 'Peanuts'
     });
   }
@@ -66,7 +65,7 @@ When initializing the Survey Alert there are a few parameters you are required t
    The IP adress of the user for which you wish to look up surveys. This is not required if you are issuing the API request from the users browser, but will be needed if you wish to make the call server to server. For more details on this check the API documentation.
 
  - **server:**  
-   The server to which the api request will be sent.  It defaults to api.peanutlabs.com, and in most cases can be left as this.
+   The server to which the api request will be sent.  It generally be left as the default of api.peanutlabs.com, but can be changed if you want to have it use https or a different server.
 
  - **alertWidth**  
    The width of the alert. Defaults to 450px and the text it contains will wrap accordingly.
